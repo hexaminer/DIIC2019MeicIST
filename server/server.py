@@ -22,8 +22,14 @@ def list_users():
     connection = sqlite3.connect('gym.db');
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM users')
-    
-    return str(cursor.fetchall())
+
+    users = cursor.fetchall()
+    response = '{"data":['
+    for user in users:
+        response += f'{{"id":"{user[0]}","name":"{user[1]}","email":"{user[2]}","litros":"{user[3]}"}},'
+    # Removes last , and finishes json
+    response = response[:-1] + ']}'
+    return response
 
 
 if __name__ == '__main__':
