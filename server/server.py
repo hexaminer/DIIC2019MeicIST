@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
-from flask import Flask
+from flask import Flask, request
+from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
+CORS(app)
 
 # Initialize DB
 connection = sqlite3.connect('gym.db');
@@ -18,7 +20,7 @@ def hello():
     return '<h1>Hello</h1>'
 
 @app.route('/users', methods = ['GET'])
-def list_users():
+def send_users():
     connection = sqlite3.connect('gym.db');
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM users')
@@ -30,7 +32,6 @@ def list_users():
     # Removes last , and finishes json
     response = response[:-1] + ']}'
     return response
-
 
 if __name__ == '__main__':
     app.run()
