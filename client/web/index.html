@@ -6,35 +6,51 @@
   <script src="js/requests.js"></script>
 </head>
 <body>
-  <div id="status_container">
-    <div id="last_baths">
-        <img class="tap" src="media/water_tap.png" align="left">
-        <!--<img src="drop.svg" align="center">-->
-    </div>
-    <div id="total_water_empty">
-    </div>
-    <div id="total_water_full">
-    </div>
+  
+  <div id="last_baths">
+    <img class="tap" src="media/water_tap.png" align="left">
+    <img src="media/drop.svg" align="center">
   </div>
+  
+  <div id="last_months">
+    <h2 id="last_months_title"> Last months </h2> 
+    <table style="width:100%">
+      <tr>
+        <th id="months">JUL</th>
+        <th id="months">AUG</th>
+        <th id="months">SEP</th>
+        <th id="months">OUT</th>
+        <th id="months">NOV</th>
+      </tr>
+      <tr>
+        <td id="monthly_value">?</td>
+        <td id="monthly_value">?</td>
+        <td id="monthly_value">?</td>
+        <td id="monthly_value">?</td>
+        <td id="monthly_value">?</td>
+      </tr>
+    </table>
+  </div>
+  
   <div id="top_24">
-    <p class="title" align="center"> TOP </p> 
+    <p id="top_title" align="center"> TOP 24h</p> 
     <table class="top">
       <tr>
-        <!--<th>1.</th>-->
-        <td><img src="media/drop1.svg" width=50% height=50%></td>
+        <td class="top_table"><img src="media/drop1.svg" width=50% height=50%></td>
       </tr>
       <tr>
-        <!--<th>2.</th>-->
-        <td ><img src="media/drop2.svg" width=60% height=40%></td>
+        <td class="top_table"><img src="media/drop2.svg" width=60% height=40%></td>
       </tr>
       <tr>
-        <!--<th>3.</th>-->
-        <td><img src="media/drop3.svg" width=70% height=30%></td>
+        <td class="top_table"><img src="media/drop3.svg" width=70% height=30%></td>
       </tr>
       <tr>
-        <!--<th>4.</th>-->
-        <td><img src="media/drop4.svg" width=80% height=20%></td>
+        <td class="top_table"><img src="media/drop4.svg" width=80% height=20%></td>
+      </tr>
+      <tr>
+        <td class="top_table"><img src="media/drop5.svg" width=90% height=10%></td>
       </tr>
     </table>
   </div>
 </body>
+
