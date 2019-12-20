@@ -12,6 +12,7 @@ users = {1: 'António Silva', 2: 'Carlos Cruz'}
 # top = [{'name': ze, 'value': 12, 'timestamp': 77889}]
 db = {'total_water': 0, 'top': [], 'baths': []}
 top = set()
+need_update = True
 
 @app.route('/')
 def hello():
@@ -19,12 +20,20 @@ def hello():
 
 @app.route('/users', methods = ['GET'])
 def send_users():
+    global need_update
+    need_update = False
     return db
+
+@app.route('/users/need_update', methods = ['GET'])
+def update_needed():
+    return {'need_update': need_update}
 
 # id = int
 # value = float
 @app.route('/reading', methods = ['POST'])
 def read():
+    global need_update
+    need_update = True
     data = request.get_json(force=True)
 
     name = users[data['id']]
