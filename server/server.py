@@ -28,6 +28,7 @@ def send_users():
     users = cursor.fetchall()
     response = '{"data":['
     for user in users:
+        print(user)
         response += f'{{"id":"{user[0]}","name":"{user[1]}","email":"{user[2]}","litros":"{user[3]}"}},'
     # Removes last , and finishes json
     response = response[:-1] + ']}'
