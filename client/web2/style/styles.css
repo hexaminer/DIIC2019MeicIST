@@ -82,7 +82,24 @@ img {
 
 #top_24 {
   height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; 
 }
 
-.water_spent {
+#svg_1 { height: 100pt; }
+#svg_2 { height: 120pt; }
+#svg_3 { height: 140pt; }
+#svg_4 { height: 160pt; }
+#svg_5 { height: 180pt; }
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  font-family: sans-serif;
+  font-size: 30pt;
 }
