@@ -2,18 +2,16 @@
 
 from flask import Flask, request
 from flask_cors import CORS
-import sqlite3
+import json
 
 app = Flask(__name__)
 CORS(app)
 
-# Initialize DB
-connection = sqlite3.connect('gym.db');
-connection.execute('DROP TABLE IF EXISTS users')
-connection.execute('CREATE TABLE users (id TEXT PRIMARY KEY, nome TEXT, email TEXT, litros REAL)')
-for i in range(200):
-    connection.execute(f'INSERT INTO users VALUES ("{str(i)}", "Nuno", "nuno@gmail.com", 0)')
-connection.commit()
+users = {1: 'António Silva', 2: 'Carlos Cruz'}
+
+# top = [{'name': ze, 'value': 12, 'timestamp': 77889}]
+db = {'total_water': 0, 'top': [], 'baths': []}
+top = set()
 
 @app.route('/')
 def hello():
@@ -21,18 +19,36 @@ def hello():
 
 @app.route('/users', methods = ['GET'])
 def send_users():
-    connection = sqlite3.connect('gym.db');
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM users')
+    return db
 
-    users = cursor.fetchall()
-    response = '{"data":['
-    for user in users:
-        print(user)
-        response += f'{{"id":"{user[0]}","name":"{user[1]}","email":"{user[2]}","litros":"{user[3]}"}},'
-    # Removes last , and finishes json
-    response = response[:-1] + ']}'
-    return response
+# id = int
+# value = float
+@app.route('/reading', methods = ['POST'])
+def read():
+    data = request.get_json(force=True)
+
+    name = users[data['id']]
+    db['total_water'] += data['value']
+    db['baths'].insert(0, {'name': name, 'value': data['value']})
+    if name in top: # remove user from top
+        for index, user in enumerate(db['top']):
+            if user['name'] == name:
+                top.remove(db['top'].pop(index)['name'])
+                break
+
+    for index, user in enumerate(db['top']):
+        if data['value'] < user['value']:
+            db['top'].insert(index, {'name': name, 'value': data['value']})
+            top.add(name)
+            break
+
+    if len(db['top']) == 0 or name not in top and len(db['top']) < 10:
+        db['top'].append({'name': name, 'value': data['value']})
+        top.add(name)
+
+    print(db)
+
+    return '{"status": OK}'
 
 if __name__ == '__main__':
     app.run()
