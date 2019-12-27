@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-users = {1: 'António Silva', 2: 'Carlos Cruz'}
+users = {1079044215003: 'António Silva', 599871920924: 'Carlos Cruz', 678343821653: 'Rui Grancho'}
 
 # top = [{'name': ze, 'value': 12, 'timestamp': 77889}]
 db = {'total_water': 0, 'top': [], 'baths': []}
@@ -60,4 +60,4 @@ def read():
     return '{"status": OK}'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

@@ -107,3 +107,13 @@ img {
 
   visibility: hidden;
 }
+
+.container_drop {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  
+  height: 200pt;
+  width: 200pt;
+}
