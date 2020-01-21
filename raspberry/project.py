@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from time import sleep, time
-import pigpio
+import pigpio, requests, sys
 from mfrc522 import MFRC522, SimpleMFRC522
 from RPi.GPIO import cleanup as GPIO_cleanup
 
@@ -33,6 +33,8 @@ check_time = millis()
 litres = 0
 need_reset = True
 MAX_WATER_CONSUMPTION = 1
+ip = sys.argv[1]
+auth = 0
 
 # Functions
 def set_colour(red, green, blue):
@@ -57,12 +59,13 @@ def update_led():
         set_colour(255, 0, 0)
 
 def reset():
-    global litres, check_time, counter, need_reset
+    global litres, check_time, counter, need_reset, auth
     litres = 0
     check_time = 0
     counter = 0
     need_reset = False
     set_colour(0, 0, 0)
+    auth = 0
 
 def flow(gpio, level, tick):
     global counter
@@ -73,12 +76,13 @@ def setup():
     set_colour(0, 255, 0)
 
 def loop():
-    global litres, need_reset
+    global litres, need_reset, auth
     # Scan for cards
     identifier = simple_reader.read_id_no_block()
 
     if identifier is not None:
         reader.MFRC522_Request(reader.PICC_REQIDL) # runs second time to fix status
+        auth = identifier
         # Update water
         if not need_reset:
             need_reset = True
@@ -91,10 +95,10 @@ def loop():
             print(f"[+] Identifier: {identifier}")
 
     elif need_reset:
-            reset()
-            need_reset == False
-
-
+        if auth != 0:
+            print(requests.post(f'http://{ip}:5000/reading', data='{"id": '+ str(auth)+',"value": '+str(litres)+'}'))
+        reset()
+        need_reset == False
 
 if __name__ == "__main__":
     try:
@@ -103,10 +107,3 @@ if __name__ == "__main__":
             loop()
     except KeyboardInterrupt:
         GPIO_cleanup()
-
-        # Scan for cards
-        # status, tag_type = reader.MFRC522_Request(reader.PICC_REQIDL)
-        # reader.MFRC522_Request(reader.PICC_REQIDL) # runs second time to fix status
-        # if status == reader.MI_OK:
-        #     uid, _ = simple_reader.read()
-        #     print(f"[+] User: {uid}")
